@@ -11,7 +11,12 @@ import java.util.UUID;
 import static lombok.AccessLevel.PRIVATE;
 
 @Entity(name = "seat")
-@Table(name = "seat", schema = "cinema")
+@Table(name = "seat", schema = "cinema", uniqueConstraints = {
+@UniqueConstraint(
+        name = "uk_seat_location",
+        columnNames = {"room_id", "row_num", "col_num"}
+)
+    })
 @Data
 @Builder(toBuilder = true)
 @EqualsAndHashCode(of = "id")
@@ -27,15 +32,15 @@ public class SeatDbEntity {
 
     @NonNull
     @Column(nullable = false)
-    private UUID room_id;
+    private UUID roomId;
 
     @NonNull
     @Column(nullable = false)
-    private Integer row_num;
+    private Integer rowNum;
 
     @NonNull
     @Column(nullable = false)
-    private Integer col_num;
+    private Integer colNum;
 
     @CreationTimestamp
     private Instant createdAt;
