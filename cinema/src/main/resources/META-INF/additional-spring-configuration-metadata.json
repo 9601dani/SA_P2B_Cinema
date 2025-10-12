@@ -1,0 +1,17 @@
+{
+  "properties": [
+    {
+      "name": "security.rsa.public-key",
+      "type": "java.security.interfaces.RSAPublicKey",
+      "description": "The public key to validate JWT"
+    },
+    {
+      "name": "spring.jackson.mapper.[ACCEPT_CASE_INSENSITIVE_ENUMS]",
+      "type": "java.lang.Boolean"
+    },
+    {
+      "name": "client.services.auth-identity",
+      "type": "java.lang.String"
+    }
+  ]
+}
