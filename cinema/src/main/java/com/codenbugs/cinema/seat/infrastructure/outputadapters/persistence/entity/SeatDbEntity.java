@@ -36,6 +36,10 @@ public class SeatDbEntity {
 
     @NonNull
     @Column(nullable = false)
+    private String name;
+
+    @NonNull
+    @Column(nullable = false)
     private Integer rowNum;
 
     @NonNull

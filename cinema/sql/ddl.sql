@@ -40,6 +40,8 @@ CREATE TABLE cinema.seat (
     CONSTRAINT uq_room_row_col UNIQUE (room_id, row_num, col_num)
 );
 
+ALTER TABLE cinema.seat ADD COLUMN name VARCHAR(5) NOT NULL;
+
 CREATE TABLE cinema.showtime (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     room_id UUID NOT NULL,

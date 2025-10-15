@@ -41,5 +41,9 @@ public class CinemaDomainEntity {
         if (this.name == null || this.name.length()< 3){
             throw new InvalidPropertyEntityDomain("Nombre del cine no valido, debe ser mayor a 3 letras");
         }
+
+        if (this.dailyCost == null || this.dailyCost.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new InvalidPropertyEntityDomain("Costo por dia del Cine, debe ser mayor a cero");
+        }
     }
 }

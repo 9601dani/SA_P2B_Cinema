@@ -25,8 +25,8 @@ public class CinemaRepositoryOutputAdapter implements StoringCinemaOutputPort, F
     @Transactional
     public CinemaDomainEntity save(CinemaDomainEntity cinema) {
         CinemaDbEntity cinemaDb = mapper.toDbEntity(cinema);
-        cinemaDbEntityJpaRepository.save(cinemaDb);
-        return mapper.toDomainEntity(cinemaDb);
+        CinemaDbEntity savedCinema =  cinemaDbEntityJpaRepository.save(cinemaDb);
+        return mapper.toDomainEntity(savedCinema);
     }
 
     @Override
