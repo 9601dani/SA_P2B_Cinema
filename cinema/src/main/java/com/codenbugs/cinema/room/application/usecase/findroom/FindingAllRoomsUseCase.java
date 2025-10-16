@@ -1,4 +1,4 @@
-package com.codenbugs.cinema.room.application.usecase.findcinema;
+package com.codenbugs.cinema.room.application.usecase.findroom;
 
 import com.codenbugs.cinema.common.application.annotations.UseCase;
 import com.codenbugs.cinema.room.application.ports.input.FindingAllRoomsByCinemaIdInputPort;

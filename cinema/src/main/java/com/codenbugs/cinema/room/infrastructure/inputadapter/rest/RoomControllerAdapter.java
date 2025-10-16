@@ -3,10 +3,13 @@ package com.codenbugs.cinema.room.infrastructure.inputadapter.rest;
 import com.codenbugs.cinema.common.infrastructure.annotation.WebAdapter;
 import com.codenbugs.cinema.room.application.ports.input.CreatingRoomInputPort;
 import com.codenbugs.cinema.room.application.ports.input.FindingAllRoomsByCinemaIdInputPort;
+import com.codenbugs.cinema.room.application.ports.input.UpdatingRoomByIdInputPort;
 import com.codenbugs.cinema.room.application.usecase.createroom.CreateRoomDto;
+import com.codenbugs.cinema.room.application.usecase.updateroom.UpdateRoomDto;
 import com.codenbugs.cinema.room.domain.RoomDomainEntity;
 import com.codenbugs.cinema.room.infrastructure.inputadapter.dto.CreateRoomRequestDto;
 import com.codenbugs.cinema.room.infrastructure.inputadapter.dto.RoomResponseDto;
+import com.codenbugs.cinema.room.infrastructure.inputadapter.dto.UpdateRoomRequestDto;
 import com.codenbugs.cinema.room.infrastructure.inputadapter.mapper.RoomRestMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +30,7 @@ public class RoomControllerAdapter {
     private final CreatingRoomInputPort creatingRoomInputPort;
     private final RoomRestMapper roomRestMapper;
     private final FindingAllRoomsByCinemaIdInputPort findingAllRoomsByCinemaIdInputPort;
+    private final UpdatingRoomByIdInputPort updatingRoomByIdInputPort;
 
     @PostMapping
     @Transactional
@@ -47,6 +51,16 @@ public class RoomControllerAdapter {
 
         return ResponseEntity.ok(listRooms);
     }
+
+    @PutMapping("{roomId}")
+    @Transactional()
+    public ResponseEntity<RoomResponseDto> updateRoom(@PathVariable UUID roomId, @RequestBody @Valid UpdateRoomRequestDto requestDto){
+        UpdateRoomDto updateRoomDto = requestDto.toDomain();
+        RoomDomainEntity roomDomain = updatingRoomByIdInputPort.updatingRoomById(roomId, updateRoomDto);
+        RoomResponseDto responseDto = roomRestMapper.toRoomResponseDto(roomDomain);
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+    }
+
 
 }
 

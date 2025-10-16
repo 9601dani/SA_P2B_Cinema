@@ -16,7 +16,7 @@ public record CreateRoomRequestDto(
         String name,
 
         @NotBlank
-        String Description,
+        String description,
 
         @PositiveOrZero
         Integer rows,
@@ -29,6 +29,6 @@ public record CreateRoomRequestDto(
 ) {
 
     public CreateRoomDto toDomain() {
-        return new CreateRoomDto(cinemaId, name, Description, rows, columns, imageUrl);
+        return new CreateRoomDto(cinemaId, name, description, rows, columns, imageUrl);
     }
 }

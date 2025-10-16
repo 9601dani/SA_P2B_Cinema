@@ -36,6 +36,14 @@ public class RoomDomainEntity {
         this.blocked = blocked;
     }
 
+    public RoomDomainEntity(String name, String description, String imageUrl, boolean commentsEnabled, boolean blocked) {
+        this.name = name;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.commentsEnabled = commentsEnabled;
+        this.blocked = blocked;
+    }
+
     public RoomDomainEntity(UUID cinemaId, String imageUrl, String name, Integer rows, Integer columns, String description) {
         this.cinemaId = cinemaId;
         this.imageUrl = imageUrl;
@@ -47,7 +55,7 @@ public class RoomDomainEntity {
     }
 
     private void validate() {
-        if (id == null) {
+        if (cinemaId == null) {
             throw new InvalidPropertyEntityDomain("El id de cine no puede ser nulo");
         }
 

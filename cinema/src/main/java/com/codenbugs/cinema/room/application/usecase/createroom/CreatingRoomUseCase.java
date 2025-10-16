@@ -2,8 +2,10 @@ package com.codenbugs.cinema.room.application.usecase.createroom;
 
 import com.codenbugs.cinema.cinema.application.ports.output.FindingCinemaByIdOutputPort;
 import com.codenbugs.cinema.common.application.annotations.UseCase;
+import com.codenbugs.cinema.common.application.exception.EntityAlreadyExistsException;
 import com.codenbugs.cinema.common.application.exception.EntityNotFount;
 import com.codenbugs.cinema.room.application.ports.input.CreatingRoomInputPort;
+import com.codenbugs.cinema.room.application.ports.output.FindingRoomByNameOutputPort;
 import com.codenbugs.cinema.room.application.ports.output.StoringRoomOutputPort;
 import com.codenbugs.cinema.room.domain.RoomDomainEntity;
 import com.codenbugs.cinema.seat.application.ports.output.StoringAllSeatsOutputPort;
@@ -22,6 +24,7 @@ public class CreatingRoomUseCase implements CreatingRoomInputPort {
     private final FindingCinemaByIdOutputPort findingCinemaByIdOutputPort;
     private final StoringRoomOutputPort  storingRoomOutputPort;
     private final StoringAllSeatsOutputPort storingAllSeatsOutputPort;
+    private final FindingRoomByNameOutputPort findingRoomByNameOutputPort;
 
     @Override
     @Transactional
@@ -32,6 +35,10 @@ public class CreatingRoomUseCase implements CreatingRoomInputPort {
         // validar existe cinema id
         if (findingCinemaByIdOutputPort.findCinemaById(roomDomain.getCinemaId()).isEmpty()){
             throw new EntityNotFount("Cine no encontrado con id: " + roomDomain.getCinemaId());
+        }
+
+        if (findingRoomByNameOutputPort.findingRoomByName(roomDomain.getName()).isPresent()){
+            throw new EntityAlreadyExistsException("Ya existe una sala con ese nombre");
         }
 
         //calculos de dominio

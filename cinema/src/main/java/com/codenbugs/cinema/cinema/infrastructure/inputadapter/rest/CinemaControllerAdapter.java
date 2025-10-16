@@ -42,7 +42,7 @@ public class CinemaControllerAdapter {
     }
 
     @GetMapping("/admin/{idAdmin}")
-        public ResponseEntity<CinemaResponseDto> findCinemaByIdAdmin(@PathVariable UUID idAdmin){
+    public ResponseEntity<CinemaResponseDto> findCinemaByIdAdmin(@PathVariable UUID idAdmin){
         CinemaDomainEntity cinemaDomain = findingCinemaByIdAdminInputPort.findCinemaByIdAdmin(idAdmin);
         return ResponseEntity.ok(cinemaMapperRest.toResponseDto(cinemaDomain));
     }

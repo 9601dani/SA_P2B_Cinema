@@ -11,7 +11,7 @@ import java.util.UUID;
 public class CreateRoomDto {
     UUID cinemaId;
     String name;
-    String Description;
+    String description;
     Integer rows;
     Integer columns;
     String imageUrl;
@@ -21,10 +21,11 @@ public class CreateRoomDto {
             return null;
         }
         return new RoomDomainEntity(this.cinemaId,
+               this.imageUrl,
                 this.name,
-                this.Description,
                 this.rows,
                 this.columns,
-                this.imageUrl);
+                this.description
+                );
     }
 }
