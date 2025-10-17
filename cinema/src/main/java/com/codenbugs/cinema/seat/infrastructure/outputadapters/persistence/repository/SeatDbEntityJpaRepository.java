@@ -4,7 +4,10 @@ import com.codenbugs.cinema.seat.infrastructure.outputadapters.persistence.entit
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
+
 @Repository
 public interface SeatDbEntityJpaRepository extends JpaRepository<SeatDbEntity, UUID> {
+    List<SeatDbEntity> findAllByRoomId(UUID roomId);
 }

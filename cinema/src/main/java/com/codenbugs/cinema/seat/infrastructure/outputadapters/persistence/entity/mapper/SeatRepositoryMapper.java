@@ -20,6 +20,14 @@ public class SeatRepositoryMapper {
                 .build();
     }
     public SeatDomainEntity toSeatDomainEntity(SeatDbEntity seatDbEntity){
-        return null;
+
+        if (seatDbEntity == null){
+            return null;
+        }
+
+        return new SeatDomainEntity(seatDbEntity.getColNum(),
+                seatDbEntity.getRowNum(),
+                seatDbEntity.getName(),
+                seatDbEntity.getRoomId());
     }
 }
