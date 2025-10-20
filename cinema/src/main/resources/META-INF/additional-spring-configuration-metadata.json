@@ -12,6 +12,10 @@
     {
       "name": "client.services.auth-identity",
       "type": "java.lang.String"
+    },
+    {
+      "name": "client.services.movie",
+      "type": "java.lang.String"
     }
   ]
 }

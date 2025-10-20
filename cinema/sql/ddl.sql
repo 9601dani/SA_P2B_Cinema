@@ -54,6 +54,9 @@ CREATE TABLE cinema.showtime (
     CONSTRAINT fk_showtime_room FOREIGN KEY (room_id) REFERENCES cinema.room (id)
 );
 
+ALTER TABLE cinema.showtime ADD COLUMN price DECIMAL(10,2) NOT NULL;
+
+
 CREATE TABLE cinema.showtimeseat (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     seat_id UUID NOT NULL,
@@ -65,3 +68,5 @@ CREATE TABLE cinema.showtimeseat (
     CONSTRAINT fk_showtimeseat_showtime FOREIGN KEY (showtime_id) REFERENCES cinema.showtime (id),
     CONSTRAINT uq_showtimeseat UNIQUE (seat_id, showtime_id)
 );
+
+ALTER TABLE cinema.showtimeseat ADD COLUMN customer_id UUID NOT NULL;

@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -33,6 +34,10 @@ public class ShowTimeDbEntity {
     @NonNull
     @Column(nullable = false)
     private UUID movieId;
+
+    @NonNull
+    @Column(nullable = false)
+    private BigDecimal price;
 
     @NonNull
     @Column(nullable = false)

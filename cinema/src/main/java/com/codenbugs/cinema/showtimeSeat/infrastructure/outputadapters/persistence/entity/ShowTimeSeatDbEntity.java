@@ -35,6 +35,10 @@ public class ShowTimeSeatDbEntity {
     private UUID showTimeId;
 
     @NonNull
+    @Column(nullable = false)
+    private UUID customerId;
+
+    @NonNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, columnDefinition = "STRING DEFAULT AVAILABLE")
     private ShowtimeSeatStatus status;

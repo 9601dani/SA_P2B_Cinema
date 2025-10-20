@@ -11,5 +11,6 @@ public class ShowTimeSeatDomainEntity {
     private UUID id;
     private UUID seatId;
     private UUID showTimeId;
+    private UUID customerId;
     private ShowtimeSeatStatus status;
 }

@@ -44,3 +44,8 @@ spring:
 security:
   rsa:
     public-key: classpath:certs/public-key.pem
+
+client:
+  services:
+    auth-identity: ${AUTH-IDENTITY_URL:http://localhost:8081}
+    movie: ${MOVIE_URL:http://localhost:8084}
