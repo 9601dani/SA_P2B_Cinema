@@ -3,9 +3,12 @@ package com.codenbugs.cinema.showtime.infrastructure.inputadapter.rest;
 import com.codenbugs.cinema.common.infrastructure.annotation.WebAdapter;
 import com.codenbugs.cinema.showtime.application.ports.input.CreatingShowTimeInputPort;
 import com.codenbugs.cinema.showtime.application.ports.input.ListAllShowTimesByCinemaIdInputPort;
+import com.codenbugs.cinema.showtime.application.ports.input.UpdatingShowTimeActiveByIdInputPort;
 import com.codenbugs.cinema.showtime.application.usecase.createshowtime.CreateShowTimeCaseDto;
+import com.codenbugs.cinema.showtime.application.usecase.updateactive.UpdateActiveCase;
 import com.codenbugs.cinema.showtime.infrastructure.inputadapter.dto.CreateShowtimeRequestDto;
 import com.codenbugs.cinema.showtime.infrastructure.inputadapter.dto.ShowTimeResponseDto;
+import com.codenbugs.cinema.showtime.infrastructure.inputadapter.dto.UpdateStatusRequestDto;
 import com.codenbugs.cinema.showtime.infrastructure.inputadapter.mapper.ShowTimeRestMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +29,7 @@ public class ShowTimeControllerAdapter {
     private final CreatingShowTimeInputPort creatingShowTimeInputPort;
     private final ListAllShowTimesByCinemaIdInputPort listAllShowTimesByCinemaIdInputPort;
     private final ShowTimeRestMapper mapper;
+    private final UpdatingShowTimeActiveByIdInputPort updatingShowTimeActiveByIdInputPort;
 
     @PostMapping
     @Transactional
@@ -44,5 +48,12 @@ public class ShowTimeControllerAdapter {
                 .toList();
 
         return ResponseEntity.ok(showTimes);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> updateShowtimeStatus(@PathVariable UUID id, @RequestBody @Valid UpdateStatusRequestDto updateStatusRequestDto){
+        UpdateActiveCase caseDto = new UpdateActiveCase(updateStatusRequestDto.active(), id);
+        updatingShowTimeActiveByIdInputPort.updateActive(caseDto);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }
