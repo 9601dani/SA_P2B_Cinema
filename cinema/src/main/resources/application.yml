@@ -49,3 +49,17 @@ client:
   services:
     auth-identity: ${AUTH-IDENTITY_URL:http://localhost:8081}
     movie: ${MOVIE_URL:http://localhost:8084}
+
+#Configuración para rabir
+rabbitmq:
+  host: ${RABBIT_HOST:localhost}
+  port: ${RABBIT_PORT:5672}
+  username: ${RABBIT_USER:guest}
+  password: ${RABBIT_PASS:guest}
+
+  # Detalles del Exchange y las Routing Keys
+  # Eventos usados por usuario
+  exchange:
+    showTime: showTime.exchange
+  routing:
+    showTime_created: showTime.created

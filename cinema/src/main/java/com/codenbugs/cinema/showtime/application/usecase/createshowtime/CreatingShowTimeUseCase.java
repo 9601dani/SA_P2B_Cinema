@@ -7,6 +7,7 @@ import com.codenbugs.cinema.room.application.ports.output.FindingRoomByIdOutputP
 import com.codenbugs.cinema.showtime.application.ports.input.CreatingShowTimeInputPort;
 import com.codenbugs.cinema.showtime.application.ports.output.FindMovieByIdOutputPort;
 import com.codenbugs.cinema.showtime.application.ports.output.FindingShowTimeRangeDateByRoomIdOutputPort;
+import com.codenbugs.cinema.showtime.application.ports.output.NotificationCreatedShowTimeEventPort;
 import com.codenbugs.cinema.showtime.application.ports.output.StoringShowTimeOutputPort;
 import com.codenbugs.cinema.showtime.domain.model.MovieDomainEntity;
 import com.codenbugs.cinema.showtime.domain.model.ShowTimeDomainEntity;
@@ -23,6 +24,7 @@ public class CreatingShowTimeUseCase implements CreatingShowTimeInputPort {
     private final FindMovieByIdOutputPort  findMovieByIdOutputPort;
     private final FindingShowTimeRangeDateByRoomIdOutputPort findingShowTimeRangeDateByRoomIdOutputPort;
     private final FindingRoomByIdOutputPort findingRoomByIdOutputPort;
+    private final NotificationCreatedShowTimeEventPort notificationCreatedShowTimeEventPort;
 
     @Override
     @Transactional
@@ -49,5 +51,8 @@ public class CreatingShowTimeUseCase implements CreatingShowTimeInputPort {
 
         // save
         storingShowTimeOutputPort.save(domain);
+
+        // notification event
+        notificationCreatedShowTimeEventPort.publisherNewShowtimeCustomers(domain);
     }
 }

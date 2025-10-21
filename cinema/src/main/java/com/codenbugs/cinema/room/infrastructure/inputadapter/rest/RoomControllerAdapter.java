@@ -3,6 +3,7 @@ package com.codenbugs.cinema.room.infrastructure.inputadapter.rest;
 import com.codenbugs.cinema.common.infrastructure.annotation.WebAdapter;
 import com.codenbugs.cinema.room.application.ports.input.CreatingRoomInputPort;
 import com.codenbugs.cinema.room.application.ports.input.FindingAllRoomsByCinemaIdInputPort;
+import com.codenbugs.cinema.room.application.ports.input.FindingRoomByIdInputPort;
 import com.codenbugs.cinema.room.application.ports.input.UpdatingRoomByIdInputPort;
 import com.codenbugs.cinema.room.application.usecase.createroom.CreateRoomDto;
 import com.codenbugs.cinema.room.application.usecase.updateroom.UpdateRoomDto;
@@ -31,6 +32,7 @@ public class RoomControllerAdapter {
     private final RoomRestMapper roomRestMapper;
     private final FindingAllRoomsByCinemaIdInputPort findingAllRoomsByCinemaIdInputPort;
     private final UpdatingRoomByIdInputPort updatingRoomByIdInputPort;
+    private final FindingRoomByIdInputPort findingRoomByIdInputPort;
 
     @PostMapping
     @Transactional
@@ -39,6 +41,12 @@ public class RoomControllerAdapter {
         RoomDomainEntity domainEntity = creatingRoomInputPort.createRoom(createRoomDto);
         RoomResponseDto responseDto = roomRestMapper.toRoomResponseDto(domainEntity);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<RoomResponseDto> findRoomById(@PathVariable UUID id) {
+        RoomResponseDto roomResponseDto = roomRestMapper.toRoomResponseDto(findingRoomByIdInputPort.findRoomById(id));
+        return ResponseEntity.ok(roomResponseDto);
     }
 
     @GetMapping("cinema/{cinemaId}")
