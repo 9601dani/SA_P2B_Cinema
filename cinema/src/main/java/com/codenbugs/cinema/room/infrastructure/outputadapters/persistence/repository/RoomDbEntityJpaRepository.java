@@ -11,5 +11,5 @@ import java.util.UUID;
 @Repository
 public interface RoomDbEntityJpaRepository extends JpaRepository<RoomDbEntity, UUID> {
     List<RoomDbEntity> findAllByCinemaId(UUID cinemaId);
-    Optional<RoomDbEntity> findByName(String name);
+    Optional<RoomDbEntity> findByNameAndCinemaId(String name, UUID cinemaId);
 }

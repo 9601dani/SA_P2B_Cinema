@@ -37,7 +37,7 @@ public class CreatingRoomUseCase implements CreatingRoomInputPort {
             throw new EntityNotFount("Cine no encontrado con id: " + roomDomain.getCinemaId());
         }
 
-        if (findingRoomByNameOutputPort.findingRoomByName(roomDomain.getName()).isPresent()){
+        if (findingRoomByNameOutputPort.findingRoomByNameAndCinemaId(roomDomain.getName(), roomDomain.getCinemaId()).isPresent()){
             throw new EntityAlreadyExistsException("Ya existe una sala con ese nombre");
         }
 

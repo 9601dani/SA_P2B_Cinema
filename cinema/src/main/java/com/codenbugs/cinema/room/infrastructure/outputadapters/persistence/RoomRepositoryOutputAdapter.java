@@ -66,8 +66,8 @@ public class RoomRepositoryOutputAdapter implements StoringRoomOutputPort, Findi
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<RoomDomainEntity> findingRoomByName(String name) {
-        return roomDbEntityJpaRepository.findByName(name)
+    public Optional<RoomDomainEntity> findingRoomByNameAndCinemaId(String name, UUID cinemaId) {
+        return roomDbEntityJpaRepository.findByNameAndCinemaId(name, cinemaId)
                 .map(mapper::toDomainEntity);
     }
 }

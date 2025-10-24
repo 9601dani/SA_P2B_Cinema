@@ -34,7 +34,7 @@ public class UpdatingRoomByIdUseCase implements UpdatingRoomByIdInputPort {
                 .orElseThrow(()-> new EntityNotFount("Sala no encontado para actualizar, Id: " + roomId));
 
         if (!currenRoom.getName().equalsIgnoreCase(updateRoomDto.getName()) &&
-                findingRoomByNameOutputPort.findingRoomByName(roomDomain.getName()).isPresent()) {
+                findingRoomByNameOutputPort.findingRoomByNameAndCinemaId(roomDomain.getName(), currenRoom.getCinemaId()).isPresent()) {
             throw new EntityAlreadyExistsException("Ya existe un cine con ese nombre");
         }
 
