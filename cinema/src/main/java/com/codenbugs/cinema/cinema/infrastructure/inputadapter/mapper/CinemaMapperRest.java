@@ -15,6 +15,7 @@ public class CinemaMapperRest {
                 .address(cinemaDomainEntity.getAddress())
                 .adminUserId(cinemaDomainEntity.getAdminUserId())
                 .imageUrl(cinemaDomainEntity.getImageUrl())
+                .createdAt(cinemaDomainEntity.getCreatedAt())
                 .build();
     }
 }

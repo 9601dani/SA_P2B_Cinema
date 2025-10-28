@@ -5,6 +5,7 @@ import com.codenbugs.cinema.common.application.exception.InvalidPropertyEntityDo
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -17,6 +18,7 @@ public class CinemaDomainEntity {
     private String address;
     private UUID adminUserId;
     private BigDecimal dailyCost;
+    private Instant createdAt;
 
     public CinemaDomainEntity(String name, String imageUrl, String address, UUID adminUserId, BigDecimal dailyCost) {
         this.name = name.toUpperCase();
@@ -27,13 +29,14 @@ public class CinemaDomainEntity {
         this.validate();
     }
 
-    public CinemaDomainEntity(UUID id, String name, String imageUrl, String address, UUID adminUserId, BigDecimal dailyCost) {
+    public CinemaDomainEntity(UUID id, String name, String imageUrl, String address, UUID adminUserId, BigDecimal dailyCost, Instant createdAt) {
         this.id = id;
         this.name = name;
         this.imageUrl = imageUrl;
         this.address = address;
         this.adminUserId = adminUserId;
         this.dailyCost = dailyCost;
+        this.createdAt = createdAt;
     }
 
     private void validate(){

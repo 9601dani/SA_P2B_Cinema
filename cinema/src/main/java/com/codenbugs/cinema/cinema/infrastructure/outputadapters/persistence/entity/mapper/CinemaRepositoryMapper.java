@@ -32,6 +32,7 @@ public class CinemaRepositoryMapper {
                 cinemaDbEntity.getImageUrl(),
                 cinemaDbEntity.getAddress(),
                 cinemaDbEntity.getAdminUserId(),
-                cinemaDbEntity.getDailyCost());
+                cinemaDbEntity.getDailyCost(),
+                cinemaDbEntity.getCreatedAt());
     }
 }

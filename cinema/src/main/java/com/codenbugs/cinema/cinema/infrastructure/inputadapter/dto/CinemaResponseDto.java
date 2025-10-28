@@ -3,6 +3,7 @@ package com.codenbugs.cinema.cinema.infrastructure.inputadapter.dto;
 import lombok.Builder;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.UUID;
 
 @Builder(toBuilder = true)
@@ -12,7 +13,8 @@ public record CinemaResponseDto (
         String imageUrl,
         String address,
         UUID adminUserId,
-        BigDecimal dailyCost
+        BigDecimal dailyCost,
+        Instant createdAt
 ){
 
 
