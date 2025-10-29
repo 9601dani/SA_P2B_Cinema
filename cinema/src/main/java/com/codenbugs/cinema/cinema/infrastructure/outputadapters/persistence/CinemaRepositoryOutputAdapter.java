@@ -10,13 +10,15 @@ import com.codenbugs.cinema.common.infrastructure.annotation.PersistenceAdapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
 public class CinemaRepositoryOutputAdapter implements StoringCinemaOutputPort, FindingCinemaByNameOutputPort,
-        FindingCinemaByIdAdminOutputPort, UpdatingCinemaByIdOutputPort, FindingCinemaByIdOutputPort {
+        FindingCinemaByIdAdminOutputPort, UpdatingCinemaByIdOutputPort, FindingCinemaByIdOutputPort,
+            FindingAllCinemaOutputPort{
 
     private final CinemaDbEntityJpaRepository cinemaDbEntityJpaRepository;
     private final CinemaRepositoryMapper mapper;
@@ -63,5 +65,13 @@ public class CinemaRepositoryOutputAdapter implements StoringCinemaOutputPort, F
     public Optional<CinemaDomainEntity> findCinemaById(UUID id) {
         return cinemaDbEntityJpaRepository.findById(id)
                 .map((mapper::toDomainEntity));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<CinemaDomainEntity> findAllCinemas() {
+        return cinemaDbEntityJpaRepository.findAll()
+                .stream().map(mapper::toDomainEntity)
+                .toList();
     }
 }

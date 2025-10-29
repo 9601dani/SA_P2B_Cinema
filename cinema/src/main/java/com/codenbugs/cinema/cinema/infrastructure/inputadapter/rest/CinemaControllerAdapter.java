@@ -1,9 +1,6 @@
 package com.codenbugs.cinema.cinema.infrastructure.inputadapter.rest;
 
-import com.codenbugs.cinema.cinema.application.ports.input.CreatingCinemaInputPort;
-import com.codenbugs.cinema.cinema.application.ports.input.FindingCinemaByIdAdminInputPort;
-import com.codenbugs.cinema.cinema.application.ports.input.FindingCinemaByIdInputPort;
-import com.codenbugs.cinema.cinema.application.ports.input.UpdatingCinemaByIdInputPort;
+import com.codenbugs.cinema.cinema.application.ports.input.*;
 import com.codenbugs.cinema.cinema.application.usecase.createcinema.CreateCinemaDto;
 import com.codenbugs.cinema.cinema.application.usecase.updatecinema.UpdateCinemaDto;
 import com.codenbugs.cinema.cinema.domain.model.CinemaDomainEntity;
@@ -18,7 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("v1/cinemas")
@@ -31,6 +30,7 @@ public class CinemaControllerAdapter {
     private final FindingCinemaByIdAdminInputPort findingCinemaByIdAdminInputPort;
     private final UpdatingCinemaByIdInputPort updatingCinemaByIdInputPort;
     private final FindingCinemaByIdInputPort findingCinemaByIdInputPort;
+    private final FindAllCinemaInputPort findAllCinemaInputPort;
 
     @PostMapping
     @Transactional
@@ -46,6 +46,14 @@ public class CinemaControllerAdapter {
     @GetMapping("/{id}")
     public ResponseEntity<CinemaResponseDto> findCinemaById(@PathVariable UUID id) {
         CinemaResponseDto cinemaResponseDto = cinemaMapperRest.toResponseDto(findingCinemaByIdInputPort.findCinemaById(id));
+        return ResponseEntity.ok(cinemaResponseDto);
+    }
+    @GetMapping("")
+    public ResponseEntity<List<CinemaResponseDto>> findAllCinemas() {
+        List<CinemaResponseDto> cinemaResponseDto = findAllCinemaInputPort.findAll().
+                stream().
+                map(cinemaMapperRest::toResponseDto)
+                .toList();
         return ResponseEntity.ok(cinemaResponseDto);
     }
 
