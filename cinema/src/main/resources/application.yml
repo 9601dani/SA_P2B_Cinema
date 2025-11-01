@@ -61,5 +61,8 @@ rabbitmq:
   # Eventos usados por usuario
   exchange:
     showTime: showTime.exchange
+    wallet: wallet.exchange
+
   routing:
     showTime_created: showTime.created
+    wallet_created: wallet.created

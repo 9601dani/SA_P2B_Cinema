@@ -1,6 +1,7 @@
 package com.codenbugs.cinema.cinema.application.usecase.createcinema;
 
 import com.codenbugs.cinema.cinema.application.ports.input.CreatingCinemaInputPort;
+import com.codenbugs.cinema.cinema.application.ports.output.CinemaCreateWalletEventPort;
 import com.codenbugs.cinema.cinema.application.ports.output.FindingCinemaByNameOutputPort;
 import com.codenbugs.cinema.cinema.application.ports.output.StoringCinemaOutputPort;
 import com.codenbugs.cinema.cinema.domain.model.CinemaDomainEntity;
@@ -17,6 +18,7 @@ public class CreatingCinemaUseCase implements CreatingCinemaInputPort {
 
     private final StoringCinemaOutputPort  storingCinemaOutputPort;
     private final FindingCinemaByNameOutputPort findingCinemaByNameOutputPort;
+    private final CinemaCreateWalletEventPort cinemaCreateWalletEventPort;
 
     @Override
     @Transactional
@@ -29,6 +31,10 @@ public class CreatingCinemaUseCase implements CreatingCinemaInputPort {
             throw new EntityAlreadyExistsException("Ya existe un cine con ese nombre");
         }
 
-        return storingCinemaOutputPort.save(domain);
+        var cinemaCreated = storingCinemaOutputPort.save(domain);
+
+        cinemaCreateWalletEventPort.publishCinemaCreateWallet(cinemaCreated.getId());
+
+        return cinemaCreated;
     }
 }

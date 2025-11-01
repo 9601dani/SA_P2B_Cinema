@@ -21,6 +21,16 @@ public class RabbitConfig {
     @Value("${rabbitmq.queues.showTime_created_notify:showTime.created.queue}")
     private String showTimeCreatedQueue;
 
+    // === WALLET ===
+    @Value("${rabbitmq.exchange.wallet:wallet.exchange}")
+    private String walletExchange;
+
+    @Value("${rabbitmq.routing.wallet_created:wallet.created}")
+    private String walletRoutingKey;
+
+    @Value("${rabbitmq.queues.wallet_created_notify: wallet.created.queue}")
+    private String walletRegisterQueue;
+
     @Bean
     public TopicExchange showTimeExchange() {
         return new TopicExchange(showTimeExchange, true, false);
@@ -37,6 +47,26 @@ public class RabbitConfig {
                 .to(showTimeExchange)
                 .with(showTimeCreatedRoutingKey);
     }
+
+    // === WALLET CONFIGURATION ===
+    @Bean
+    public TopicExchange walletExchange() {
+        return new TopicExchange(walletExchange, true, false);
+    }
+
+    @Bean
+    public Queue walletQueue() {
+        return new Queue(walletRegisterQueue, true);
+    }
+
+    @Bean
+    public Binding walletBinding(Queue walletQueue, TopicExchange walletExchange) {
+        return BindingBuilder.bind(walletQueue)
+                .to(walletExchange)
+                .with(walletRoutingKey);
+    }
+
+    // === COMMON CONFIGURATION ===
 
     @Bean
     public Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
