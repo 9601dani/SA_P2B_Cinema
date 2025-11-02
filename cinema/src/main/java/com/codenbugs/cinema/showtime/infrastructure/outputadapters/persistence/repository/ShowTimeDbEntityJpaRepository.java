@@ -27,4 +27,17 @@ public interface ShowTimeDbEntityJpaRepository extends JpaRepository<ShowTimeDbE
     );
 
     List<ShowTimeDbEntity> findAllByRoomIdIn(List<UUID> ids);
+
+    @Query("""
+        SELECT st
+        FROM showtime st
+        WHERE st.roomId IN :roomIds
+          AND st.startTime >= :startTime
+          AND st.endTime <= :endTime
+    """)
+    List<ShowTimeDbEntity> findAllByRoomIdInAndRangeDate(
+            @Param("roomIds") List<UUID> roomIds,
+            @Param("startTime") LocalDateTime startTime,
+            @Param("endTime") LocalDateTime endTime
+    );
 }

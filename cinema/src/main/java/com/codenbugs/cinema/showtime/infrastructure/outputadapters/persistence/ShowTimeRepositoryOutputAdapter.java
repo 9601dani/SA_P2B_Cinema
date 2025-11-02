@@ -2,10 +2,7 @@ package com.codenbugs.cinema.showtime.infrastructure.outputadapters.persistence;
 
 import com.codenbugs.cinema.common.application.exception.EntityNotFount;
 import com.codenbugs.cinema.common.infrastructure.annotation.PersistenceAdapter;
-import com.codenbugs.cinema.showtime.application.ports.output.FindingShowTimeRangeDateByRoomIdOutputPort;
-import com.codenbugs.cinema.showtime.application.ports.output.ListAllShowTimesByListRoomsIdOutputPort;
-import com.codenbugs.cinema.showtime.application.ports.output.StoringShowTimeOutputPort;
-import com.codenbugs.cinema.showtime.application.ports.output.UpdatingShowTimeActiveByIdOutputPort;
+import com.codenbugs.cinema.showtime.application.ports.output.*;
 import com.codenbugs.cinema.showtime.domain.model.ShowTimeDomainEntity;
 import com.codenbugs.cinema.showtime.infrastructure.outputadapters.persistence.entity.ShowTimeDbEntity;
 import com.codenbugs.cinema.showtime.infrastructure.outputadapters.persistence.entity.mapper.ShowTimeRepositoryMapper;
@@ -20,7 +17,7 @@ import java.util.UUID;
 @PersistenceAdapter
 @RequiredArgsConstructor
 public class ShowTimeRepositoryOutputAdapter implements StoringShowTimeOutputPort, FindingShowTimeRangeDateByRoomIdOutputPort,
-        ListAllShowTimesByListRoomsIdOutputPort, UpdatingShowTimeActiveByIdOutputPort {
+        ListAllShowTimesByListRoomsIdOutputPort, UpdatingShowTimeActiveByIdOutputPort, ListAllShowTimesByListRoomsIdRangeDateOutputPort {
 
     private final ShowTimeRepositoryMapper mapper;
     private final ShowTimeDbEntityJpaRepository jpaRepository;
@@ -56,4 +53,17 @@ public class ShowTimeRepositoryOutputAdapter implements StoringShowTimeOutputPor
 
         jpaRepository.save(showTimeDb);
     }
+
+    @Override
+    public List<ShowTimeDomainEntity> findAllShowTimesByListRoomsIdRangeDate(
+            List<UUID> roomsId,
+            LocalDateTime startTime,
+            LocalDateTime endTime
+    ) {
+        return jpaRepository.findAllByRoomIdInAndRangeDate(roomsId, startTime, endTime)
+                .stream()
+                .map(mapper::toDomainEntity)
+                .toList();
+    }
+
 }

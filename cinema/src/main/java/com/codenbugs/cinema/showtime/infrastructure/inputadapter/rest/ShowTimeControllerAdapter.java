@@ -1,14 +1,11 @@
 package com.codenbugs.cinema.showtime.infrastructure.inputadapter.rest;
 
 import com.codenbugs.cinema.common.infrastructure.annotation.WebAdapter;
-import com.codenbugs.cinema.showtime.application.ports.input.CreatingShowTimeInputPort;
-import com.codenbugs.cinema.showtime.application.ports.input.ListAllShowTimesByCinemaIdInputPort;
-import com.codenbugs.cinema.showtime.application.ports.input.UpdatingShowTimeActiveByIdInputPort;
+import com.codenbugs.cinema.showtime.application.ports.input.*;
 import com.codenbugs.cinema.showtime.application.usecase.createshowtime.CreateShowTimeCaseDto;
+import com.codenbugs.cinema.showtime.application.usecase.reporting.ReportingRangeDto;
 import com.codenbugs.cinema.showtime.application.usecase.updateactive.UpdateActiveCase;
-import com.codenbugs.cinema.showtime.infrastructure.inputadapter.dto.CreateShowtimeRequestDto;
-import com.codenbugs.cinema.showtime.infrastructure.inputadapter.dto.ShowTimeResponseDto;
-import com.codenbugs.cinema.showtime.infrastructure.inputadapter.dto.UpdateStatusRequestDto;
+import com.codenbugs.cinema.showtime.infrastructure.inputadapter.dto.*;
 import com.codenbugs.cinema.showtime.infrastructure.inputadapter.mapper.ShowTimeRestMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +27,8 @@ public class ShowTimeControllerAdapter {
     private final ListAllShowTimesByCinemaIdInputPort listAllShowTimesByCinemaIdInputPort;
     private final ShowTimeRestMapper mapper;
     private final UpdatingShowTimeActiveByIdInputPort updatingShowTimeActiveByIdInputPort;
+    private final ReportingShowTimesPerRoomByCinemaIdInputPort reportingShowTimesPerRoomByCinemaIdInputPort;
+    private final ReportingShowTimesPerRoomByCinemaIdRangeDateInputPort reportingShowTimesPerRoomByCinemaIdRangeDateInputPort;
 
     @PostMapping
     @Transactional
@@ -56,4 +55,27 @@ public class ShowTimeControllerAdapter {
         updatingShowTimeActiveByIdInputPort.updateActive(caseDto);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+    // reports
+    @PostMapping("/reports/range/cinema/rooms" )
+    public ResponseEntity<List<ReportShowTimesRoomsDto>> reportingShowTimesPerRoomByCinemaIdRangeDate(@RequestBody @Valid ReportingRangeRequestDto requestDto){
+        ReportingRangeDto range = requestDto.toCase();
+        var report = reportingShowTimesPerRoomByCinemaIdRangeDateInputPort.reportShowTimesPerRoomByCinemaIdRangeDate(range)
+                .stream()
+                .map(mapper::toReportResponseDto)
+                .toList();
+
+        return ResponseEntity.ok(report);
+    }
+
+    @GetMapping("/reports/cinema/{cinemaId}/rooms" )
+    public ResponseEntity<List<ReportShowTimesRoomsDto>> reportingShowTimesPerRoomByCinemaId(@PathVariable UUID cinemaId){
+        var report = reportingShowTimesPerRoomByCinemaIdInputPort.reportShowTimesPerRoomByCinemaId(cinemaId)
+                .stream()
+                .map(mapper::toReportResponseDto)
+                .toList();
+
+        return ResponseEntity.ok(report);
+    }
+
 }

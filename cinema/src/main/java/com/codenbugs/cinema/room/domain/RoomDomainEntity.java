@@ -3,7 +3,9 @@ package com.codenbugs.cinema.room.domain;
 import com.codenbugs.cinema.common.application.domain.annotations.DomainEntity;
 import com.codenbugs.cinema.common.application.exception.InvalidPropertyEntityDomain;
 import com.codenbugs.cinema.seat.domain.SeatDomainEntity;
+import com.codenbugs.cinema.showtime.domain.model.ShowTimeDomainEntity;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,8 @@ public class RoomDomainEntity {
     private String description;
     private boolean commentsEnabled;
     private boolean blocked;
+    @Setter
+    private List<ShowTimeDomainEntity> showTimes;
 
     public RoomDomainEntity(UUID id, UUID cinemaId, Integer capacity, String imageUrl, String name, Integer rows, Integer columns, String description, boolean commentsEnabled, boolean blocked) {
         this.id = id;
