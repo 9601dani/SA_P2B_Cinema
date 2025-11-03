@@ -25,7 +25,9 @@ public class SeatRepositoryMapper {
             return null;
         }
 
-        return new SeatDomainEntity(seatDbEntity.getColNum(),
+        return new SeatDomainEntity(
+                seatDbEntity.getId(),
+                seatDbEntity.getColNum(),
                 seatDbEntity.getRowNum(),
                 seatDbEntity.getName(),
                 seatDbEntity.getRoomId());
