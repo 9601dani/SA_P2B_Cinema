@@ -12,12 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
 public class ShowTimeRepositoryOutputAdapter implements StoringShowTimeOutputPort, FindingShowTimeRangeDateByRoomIdOutputPort,
-        ListAllShowTimesByListRoomsIdOutputPort, UpdatingShowTimeActiveByIdOutputPort, ListAllShowTimesByListRoomsIdRangeDateOutputPort {
+        ListAllShowTimesByListRoomsIdOutputPort, UpdatingShowTimeActiveByIdOutputPort, ListAllShowTimesByListRoomsIdRangeDateOutputPort ,
+        FindingShowTimeByIdOutputPort{
 
     private final ShowTimeRepositoryMapper mapper;
     private final ShowTimeDbEntityJpaRepository jpaRepository;
@@ -66,4 +68,9 @@ public class ShowTimeRepositoryOutputAdapter implements StoringShowTimeOutputPor
                 .toList();
     }
 
+    @Override
+    public Optional<ShowTimeDomainEntity> findById(UUID id) {
+        return jpaRepository.findById(id)
+                .map(mapper::toDomainEntity);
+    }
 }

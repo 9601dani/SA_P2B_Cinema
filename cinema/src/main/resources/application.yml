@@ -49,6 +49,7 @@ client:
   services:
     auth-identity: ${AUTH-IDENTITY_URL:http://localhost:8081}
     movie: ${MOVIE_URL:http://localhost:8084}
+    promotion: ${PROMOTION_URL:http://localhost:8089}
 
 #Configuración para rabir
 rabbitmq:
@@ -62,7 +63,14 @@ rabbitmq:
   exchange:
     showTime: showTime.exchange
     wallet: wallet.exchange
+    ticket: ticket.exchange
+    stateTicket: stateTicket.exchange
 
   routing:
     showTime_created: showTime.created
     wallet_created: wallet.created
+    ticket_created: ticket.created
+    stateTicket_created: stateTicket.created
+
+  queues:
+    stateTicket_created_notify: stateTicket.created.queue

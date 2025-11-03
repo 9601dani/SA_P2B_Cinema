@@ -1,4 +1,5 @@
 CREATE SCHEMA IF NOT EXISTS cinema;
+CREATE SCHEMA IF NOT EXISTS "sale";
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
@@ -56,17 +57,25 @@ CREATE TABLE cinema.showtime (
 
 ALTER TABLE cinema.showtime ADD COLUMN price DECIMAL(10,2) NOT NULL;
 
-
-CREATE TABLE cinema.showtimeseat (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    seat_id UUID NOT NULL,
-    showtime_id UUID NOT NULL,
-    status VARCHAR(50) NOT NULL DEFAULT 'AVAILABLE',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP,
-    CONSTRAINT fk_showtimeseat_seat FOREIGN KEY (seat_id) REFERENCES cinema.seat (id),
-    CONSTRAINT fk_showtimeseat_showtime FOREIGN KEY (showtime_id) REFERENCES cinema.showtime (id),
-    CONSTRAINT uq_showtimeseat UNIQUE (seat_id, showtime_id)
+CREATE TYPE sale.state_ticket AS ENUM (
+   'PENDING_PAYMENT',
+   'COMPLETED_PAYMENT',
+   'REJECTED'
 );
 
-ALTER TABLE cinema.showtimeseat ADD COLUMN customer_id UUID NOT NULL;
+CREATE TABLE "sale"."ticket_sale" (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    showtime_id UUID NOT NULL,
+    seat_id UUID NOT NULL,
+    user_id UUID NOT NULL,
+    purchase_date TIMESTAMP NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    discount_percentage DECIMAL(10,2) NOT NULL,
+    price_total DECIMAL(10,2) NOT NULL,
+    state sale.state_ticket NOT NULL,
+    promotion_id UUID,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP,
+    CONSTRAINT fk_ticket_seat FOREIGN KEY (seat_id) REFERENCES cinema.seat (id),
+    CONSTRAINT fk_ticket_showtime FOREIGN KEY (showtime_id) REFERENCES cinema.showtime (id)
+);

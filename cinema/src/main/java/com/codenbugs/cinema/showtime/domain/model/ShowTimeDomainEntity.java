@@ -86,4 +86,15 @@ public class ShowTimeDomainEntity {
         this.durationMinutes = (int) minutes;
     }
 
+    public void validateActiveAndCurrentDate(){
+        if (this.active == null || !this.active) {
+            throw new InvalidPropertyEntityDomain("No se puede vender un ticket para una funcion inactiva.");
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        if (this.endTime.isBefore(now)) {
+            throw new InvalidPropertyEntityDomain("No se puede vender un ticket para una funcion que ya ha pasado.");
+        }
+    }
+
 }

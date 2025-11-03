@@ -28,43 +28,101 @@ public class RabbitConfig {
     @Value("${rabbitmq.routing.wallet_created:wallet.created}")
     private String walletRoutingKey;
 
-    @Value("${rabbitmq.queues.wallet_created_notify: wallet.created.queue}")
+    @Value("${rabbitmq.queues.wallet_created_notify:wallet.created.queue}")
     private String walletRegisterQueue;
 
+    // === TICKET ===
+    @Value("${rabbitmq.exchange.ticket:ticket.exchange}")
+    private String ticketExchange;
+
+    @Value("${rabbitmq.routing.ticket_created:ticket.created}")
+    private String ticketCreatedRoutingKey;
+
+    @Value("${rabbitmq.queues.ticket_created_notify:ticket.created.queue}")
+    private String ticketCreatedQueue;
+
+    // === STATE TICKET ===
+    @Value("${rabbitmq.exchange.stateTicket:stateTicket.exchange}")
+    private String stateTicketExchange;
+
+    @Value("${rabbitmq.routing.stateTicket_created:stateTicket.created}")
+    private String stateTicketCreatedRoutingKey;
+
+    @Value("${rabbitmq.queues.stateTicket_created_notify:stateTicket.created.queue}")
+    private String stateTicketCreatedQueue;
+
+    // === SHOWTIME ===
     @Bean
-    public TopicExchange showTimeExchange() {
+    public TopicExchange showTimeTopicExchange() {
         return new TopicExchange(showTimeExchange, true, false);
     }
 
     @Bean
-    public Queue showTimeCreatedQueue() {
+    public Queue showTimeTopicCreatedQueue() {
         return new Queue(showTimeCreatedQueue, true);
     }
 
     @Bean
-    public Binding showTimeBinding(Queue showTimeCreatedQueue, TopicExchange showTimeExchange) {
-        return BindingBuilder.bind(showTimeCreatedQueue)
-                .to(showTimeExchange)
+    public Binding showTimeTopicBinding(Queue showTimeTopicCreatedQueue, TopicExchange showTimeTopicExchange) {
+        return BindingBuilder.bind(showTimeTopicCreatedQueue)
+                .to(showTimeTopicExchange)
                 .with(showTimeCreatedRoutingKey);
     }
 
     // === WALLET CONFIGURATION ===
     @Bean
-    public TopicExchange walletExchange() {
+    public TopicExchange walletTopicExchange() {
         return new TopicExchange(walletExchange, true, false);
     }
 
     @Bean
-    public Queue walletQueue() {
+    public Queue walletTopicQueue() {
         return new Queue(walletRegisterQueue, true);
     }
 
     @Bean
-    public Binding walletBinding(Queue walletQueue, TopicExchange walletExchange) {
-        return BindingBuilder.bind(walletQueue)
-                .to(walletExchange)
+    public Binding walletTopicBinding(Queue walletTopicQueue, TopicExchange walletTopicExchange) {
+        return BindingBuilder.bind(walletTopicQueue)
+                .to(walletTopicExchange)
                 .with(walletRoutingKey);
     }
+
+    // === TICKET CONFIGURATION ===
+    @Bean
+    public TopicExchange ticketTopicExchange() {
+        return new TopicExchange(ticketExchange, true, false);
+    }
+
+    @Bean
+    public Queue ticketTopicQueue() {
+        return new Queue(ticketCreatedQueue, true);
+    }
+
+    @Bean
+    public Binding ticketTopicBinding(Queue ticketTopicQueue, TopicExchange ticketTopicExchange) {
+        return BindingBuilder.bind(ticketTopicQueue)
+                .to(ticketTopicExchange)
+                .with(ticketCreatedRoutingKey);
+    }
+
+    // === STATE TICKET CONFIGURATION ===
+    @Bean
+    public TopicExchange stateTicketTopicExchange() {
+        return new TopicExchange(stateTicketExchange, true, false);
+    }
+
+    @Bean
+    public Queue stateTicketTopicQueue() {
+        return new Queue(stateTicketCreatedQueue, true);
+    }
+
+    @Bean
+    public Binding stateTicketTopicBinding(Queue stateTicketTopicQueue, TopicExchange stateTicketTopicExchange) {
+        return BindingBuilder.bind(stateTicketTopicQueue)
+                .to(stateTicketTopicExchange)
+                .with(stateTicketCreatedRoutingKey);
+    }
+
 
     // === COMMON CONFIGURATION ===
 

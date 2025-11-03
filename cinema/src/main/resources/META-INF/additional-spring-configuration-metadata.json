@@ -16,6 +16,10 @@
     {
       "name": "client.services.movie",
       "type": "java.lang.String"
+    },
+    {
+      "name": "client.services.promotion",
+      "type": "java.lang.String"
     }
   ]
 }
