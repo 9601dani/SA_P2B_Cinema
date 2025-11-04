@@ -1,5 +1,6 @@
 package com.codenbugs.cinema.ticketsale.domain.model;
 
+import com.codenbugs.cinema.common.application.domain.annotations.DomainEntity;
 import com.codenbugs.cinema.common.application.exception.InvalidPropertyEntityDomain;
 import lombok.Getter;
 
@@ -8,6 +9,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
+@DomainEntity
 public class PromotionDomainEntity {
     private UUID id;
     private BigDecimal discountPercentage;

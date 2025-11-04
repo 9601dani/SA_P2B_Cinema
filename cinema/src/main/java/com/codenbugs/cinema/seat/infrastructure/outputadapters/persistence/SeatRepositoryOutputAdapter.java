@@ -1,6 +1,7 @@
 package com.codenbugs.cinema.seat.infrastructure.outputadapters.persistence;
 
 import com.codenbugs.cinema.common.infrastructure.annotation.PersistenceAdapter;
+import com.codenbugs.cinema.seat.application.ports.output.FindingAllSeatsByListRoomIdsOutputPort;
 import com.codenbugs.cinema.seat.application.ports.output.FindingAllSeatsByRoomIdOutputPort;
 import com.codenbugs.cinema.seat.application.ports.output.FindingSeatByIdOutputPort;
 import com.codenbugs.cinema.seat.application.ports.output.StoringAllSeatsOutputPort;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @PersistenceAdapter
 @RequiredArgsConstructor
 public class SeatRepositoryOutputAdapter implements StoringAllSeatsOutputPort, FindingAllSeatsByRoomIdOutputPort,
-        FindingSeatByIdOutputPort {
+        FindingSeatByIdOutputPort, FindingAllSeatsByListRoomIdsOutputPort {
 
     private final SeatDbEntityJpaRepository seatDbEntityJpaRepository;
     private final SeatRepositoryMapper mapper;
@@ -46,5 +47,13 @@ public class SeatRepositoryOutputAdapter implements StoringAllSeatsOutputPort, F
     public Optional<SeatDomainEntity> findById(UUID seatId) {
         return seatDbEntityJpaRepository.findById(seatId)
                 .map(mapper::toSeatDomainEntity);
+    }
+
+    @Override
+    public List<SeatDomainEntity> findAllSeatsByListRoomIds(List<UUID> roomIds) {
+        return seatDbEntityJpaRepository.findAllByRoomIdIn(roomIds)
+                .stream()
+                .map(mapper::toSeatDomainEntity)
+                .toList();
     }
 }

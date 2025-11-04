@@ -1,13 +1,11 @@
 package com.codenbugs.cinema.ticketsale.infrastructure.inputadapter.rest;
 
 import com.codenbugs.cinema.common.infrastructure.annotation.WebAdapter;
+import com.codenbugs.cinema.showtime.infrastructure.inputadapter.dto.ReportingRangeRequestDto;
 import com.codenbugs.cinema.ticketsale.application.ports.input.*;
 import com.codenbugs.cinema.ticketsale.application.usecase.update.UpdateStateCaseDto;
 import com.codenbugs.cinema.ticketsale.application.usecase.update.UpdatingSeatCaseDto;
-import com.codenbugs.cinema.ticketsale.infrastructure.inputadapter.dto.CreateTicketRequestDto;
-import com.codenbugs.cinema.ticketsale.infrastructure.inputadapter.dto.TicketResponseDto;
-import com.codenbugs.cinema.ticketsale.infrastructure.inputadapter.dto.UpdateSeatRequestDto;
-import com.codenbugs.cinema.ticketsale.infrastructure.inputadapter.dto.UpdateStateRequestDto;
+import com.codenbugs.cinema.ticketsale.infrastructure.inputadapter.dto.*;
 import com.codenbugs.cinema.ticketsale.infrastructure.inputadapter.mapper.TicketRestMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("v1/ad-tickets")
+@RequestMapping("v1/tickets")
 @WebAdapter
 @RequiredArgsConstructor
 public class TicketControllerAdapter {
@@ -31,6 +29,8 @@ public class TicketControllerAdapter {
     private final ListAllTicketsByShowTimeIdInputPort listAllTicketsByShowTimeIdInputPort;
     private final ListAllTicketsByUserIdAndShowTimeIdInputPort listAllTicketsByUserIdAndShowTimeIdInputPort;
     private final UpdatingSeatByTicketIdInputPort updatingSeatByTicketIdInputPort;
+    private final ReportingTicketsSaleByCinemaIdInputPort reportingTicketsSaleByCinemaIdInputPort;
+    private final ReportingTicketsSaleByCinemaIdRangeDateInputPort reportingTicketsSaleByCinemaIdRangeDateInputPort;
     private final TicketRestMapper ticketRestMapper;
 
     @PostMapping
@@ -81,6 +81,26 @@ public class TicketControllerAdapter {
         UpdatingSeatCaseDto updateStateCaseDto = requestDto.toCaseDto();
         updatingSeatByTicketIdInputPort.updateSeatByTicketId(updateStateCaseDto, id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    // reports
+    @GetMapping("/report/cinema/room/{cinemaId}")
+    public ResponseEntity<List<ReportTicketsPerRoomResponseDto>> reportTicketsSaleByCinemaId(@PathVariable UUID cinemaId) {
+        var report = reportingTicketsSaleByCinemaIdInputPort.reportTicketsSaleByCinemaId(cinemaId)
+                .stream()
+                .map(ticketRestMapper::toReportResponseDto)
+                .toList();
+        return ResponseEntity.ok(report);
+    }
+
+    @PostMapping("/report/range/cinema/room")
+    public ResponseEntity<List<ReportTicketsPerRoomResponseDto>> reportTicketsSaleByCinemaIdRangeDate(@RequestBody @Valid ReportingRangeRequestDto requestDto) {
+        var range = requestDto.toCase();
+        var report = reportingTicketsSaleByCinemaIdRangeDateInputPort.reportTicketsSaleByCinemaIdRangeDate(range)
+                .stream()
+                .map(ticketRestMapper::toReportResponseDto)
+                .toList();
+        return ResponseEntity.ok(report);
     }
 
 }

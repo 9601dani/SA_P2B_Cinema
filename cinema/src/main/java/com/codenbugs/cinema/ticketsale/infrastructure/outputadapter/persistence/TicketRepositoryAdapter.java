@@ -10,6 +10,7 @@ import com.codenbugs.cinema.ticketsale.infrastructure.outputadapter.persistence.
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class TicketRepositoryAdapter implements StoringTicketOutputPort, FindingTicketBySeatIdAndShowTimeIdOutputPort,
         UpdatingStateByIdOutputPort, FindingTicketByIdOutputPort, ListAllTicketsByShowTimeIdOutputPort, ListAllTicketByUserIdOutputPort,
-        ListAllTicketsByUserIdAndShowTimeIdOutputPort, UpdatingSeatByTicketIdOutputPort{
+        ListAllTicketsByUserIdAndShowTimeIdOutputPort, UpdatingSeatByTicketIdOutputPort, ListAllTicketsByListShowTimesIdOutputPort, ListAllTicketsByListShowTimesIdRangDateOutputPort{
 
     private final TicketSaleDBRepository ticketSaleDBRepository;
     private final TicketPersistenceMapper ticketPersistenceMapper;
@@ -55,7 +56,7 @@ public class TicketRepositoryAdapter implements StoringTicketOutputPort, Finding
 
     @Override
     public List<TicketSaleDomainEntity> listAllTicketsByShowTimeId(UUID cinemaId) {
-        return ticketSaleDBRepository.findAllByShowtimeId(cinemaId).stream()
+        return ticketSaleDBRepository.findAllByShowtimeIdAndState(cinemaId, StateTicket.COMPLETED_PAYMENT).stream()
                 .map(ticketPersistenceMapper::toDomainEntity)
                 .toList();
     }
@@ -81,5 +82,19 @@ public class TicketRepositoryAdapter implements StoringTicketOutputPort, Finding
                 .orElseThrow(() -> new EntityNotFount("Ticket no encontrado para el cambio de asiento"));
         ticketCurrent.setSeatId(seatId);
         ticketSaleDBRepository.save(ticketCurrent);
+    }
+
+    @Override
+    public List<TicketSaleDomainEntity> findAllTicketsByListShowTimesId(List<UUID> showTimesIds) {
+        return ticketSaleDBRepository.findAllByShowtimeIdInAndState(showTimesIds, StateTicket.COMPLETED_PAYMENT).stream()
+                .map(ticketPersistenceMapper::toDomainEntity)
+                .toList();
+    }
+
+    @Override
+    public List<TicketSaleDomainEntity> findAllTicketsByListShowTimesIdRangDate(List<UUID> showTimesIds, Instant startDate, Instant endDate) {
+        return ticketSaleDBRepository.findAllByShowtimeIdInAndRangeDateAndState(showTimesIds, startDate, endDate, StateTicket.COMPLETED_PAYMENT).stream()
+                .map(ticketPersistenceMapper::toDomainEntity)
+                .toList();
     }
 }
