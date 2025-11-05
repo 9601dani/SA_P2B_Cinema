@@ -9,7 +9,7 @@ import org.springframework.context.annotation.PropertySource;
 @EnableFeignClients
 @SpringBootApplication
 @ConfigurationPropertiesScan
-@PropertySource("file:${user.dir}/.env")
+//@PropertySource("file:${user.dir}/.env")
 public class CinemaApplication {
 
 	public static void main(String[] args) {

@@ -54,7 +54,7 @@ security:
 
 client:
   services:
-    auth-identity: ${AUTH-IDENTITY_URL:http://localhost:8081}
+    auth-identity: ${AUTH_IDENTITY_URL:http://localhost:8081}
     movie: ${MOVIE_URL:http://localhost:8084}
     promotion: ${PROMOTION_URL:http://localhost:8089}
 
