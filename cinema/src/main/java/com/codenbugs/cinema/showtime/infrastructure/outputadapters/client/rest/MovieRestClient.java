@@ -14,6 +14,6 @@ public interface MovieRestClient {
     @GetMapping("/v1/movies/{id}")
     MovieResponseDto findMovieById(@PathVariable UUID id);
 
-    @GetMapping
+    @GetMapping("/v1/movies")
     List<MovieResponseDto> findAllMovies();
 }
