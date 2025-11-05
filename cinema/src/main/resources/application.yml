@@ -34,12 +34,19 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: validate
-
     open-in-view: false
-
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  rabbitmq:
+    host: ${RABBIT_HOST}
+    port: ${RABBIT_PORT}
+    username: ${RABBIT_USER}
+    password: ${RABBIT_PASS}
+    virtual-host: ${RABBIT_VHOST}
+    ssl:
+      enabled: true
 
 security:
   rsa:
@@ -51,15 +58,7 @@ client:
     movie: ${MOVIE_URL:http://localhost:8084}
     promotion: ${PROMOTION_URL:http://localhost:8089}
 
-#Configuración para rabir
 rabbitmq:
-  host: ${RABBIT_HOST:localhost}
-  port: ${RABBIT_PORT:5672}
-  username: ${RABBIT_USER:guest}
-  password: ${RABBIT_PASS:guest}
-
-  # Detalles del Exchange y las Routing Keys
-  # Eventos usados por usuario
   exchange:
     showTime: showTime.exchange
     wallet: wallet.exchange
